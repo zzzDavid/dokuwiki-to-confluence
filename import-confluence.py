@@ -71,7 +71,7 @@ def save_attachments(space, curpage, attachment):
             confluence.attach_file(filename=filename, name=None, content_type = attach['contentType'], page_id=curpage['id'], space=space)
         except:
             # I have no idea which exception this thing throws, so all of them.
-            print ("ERROR: Can not upload file '{0}' for the page '{1}' in space {2}".format(join(filename , attachment), curpage['title'], space))
+            print ("ERROR: Can not upload file '{0}' for the page '{1}' in space {2}".format(filename, curpage['title'], space))
 
 def save(project_dir, filename, pagename, is_directory, tree):
     # Retrives text from a file and converts it
@@ -95,11 +95,14 @@ def save(project_dir, filename, pagename, is_directory, tree):
                 'space' : space,
                 'title' : pagename}
     # server.confluence2.storePage(token, newpage)
-    confluence.update_or_create_page(
-        parent_id=parent_id,
+    confluence.create_page(
+        space=space,
         title=pagename,
         body=content,
-        representation='storage'
+        parent_id=parent_id,
+        type='page',
+        representation='storage',
+        editor='v2'
     )
     # Push attachments to the page
     # result = server.confluence2.getPage(token,space,pagename)
@@ -112,10 +115,9 @@ def add_page (project_dir, filename, is_directory = False):
     if filename[-4:] == '.txt':
         pagename = filename[:-4]
         pagename = pagename.replace('_',' ').strip()
-    try:
-        # result = server.confluence2.getPage(token, space, pagename)
-        result = confluence.get_page_by_title(space, pagename)
-    except Fault:
+    # result = server.confluence2.getPage(token, space, pagename)
+    result = confluence.get_page_by_title(space, pagename)
+    if result is None:
         print ("Saving page %s" % pagename)
         result = save(project_dir , filename, pagename, is_directory, tree)
     else:
