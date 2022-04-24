@@ -22,7 +22,7 @@ context.check_hostname = False
 
 # Connects to confluence server with username and password
 site_URL = "https://justforfun25.atlassian.net"
-user, pw = "nikita.u.lazarev@gmail.com", "Q5O5NE8MxgDKRrrdJNut5E68"
+user, pw = "nikita.u.lazarev@gmail.com", "xiZIEqW5bjyrHUv0LfYA5A83"
 confluence = Confluence(url=site_URL, username=user, password=pw, cloud=True)
 space = "Fun"
 
@@ -88,12 +88,11 @@ def save(project_dir, filename, pagename, is_directory, tree):
         f.write(content)
     # Create empty page with content
     # content = server.confluence2.convertWikiToStorageFormat(token, content)
-    content = confluence.convert_wiki_to_storage(content)
+    try:
+        content = confluence.convert_wiki_to_storage(content)
+    except:
+        content = "no content"
     parent_id = tree.get_parent (project_dir, join(project_dir, filename))
-    newpage = { 'content' : content,
-                'parentId' : parent_id,
-                'space' : space,
-                'title' : pagename}
     # server.confluence2.storePage(token, newpage)
     confluence.create_page(
         space=space,
