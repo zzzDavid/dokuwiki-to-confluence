@@ -20,14 +20,14 @@ context.verify_mode = ssl.CERT_NONE
 context.check_hostname = False
 
 # Connects to confluence server with username and password
-site_URL = "http://your.confluence.com"
+site_URL = "https://justforfun25.atlassian.net"
 server = ServerProxy(site_URL + "/rpc/xmlrpc", context=context)
 
-username = "your_username"
+username = "nikita.u.lazarev@gmail.com"
 if len(sys.argv) > 1 and sys.argv[1] == '-p':
     pwd = getpass("Enter password: ")
 else:
-	pwd = "your_password"
+	pwd = "qwertyqwerty12"
 
 token = server.confluence2.login(username, pwd)
 
